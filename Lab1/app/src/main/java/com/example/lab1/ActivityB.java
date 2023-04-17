@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
 
 public class ActivityB extends AppCompatActivity {
     private Button dialogButton;
@@ -17,7 +20,26 @@ public class ActivityB extends AppCompatActivity {
     private Button startaButton;
     private Button finishbButton;
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data == null)
+        {
+            return;
+        }
+        stopUpdate stopupdate1;
+        stopupdate1 = new stopUpdate(data.getStringExtra("from"));
+        stopupdate1.update("%s.onStop()\n", "Stopped");
+        stopupdate1.update("%s.onDestroy()\n", "Destroyed");
+    }
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        String from = getIntent().getStringExtra("from");
+        if(from!=null)
+        {
+            stopUpdate stopupdate;
+            stopupdate = new stopUpdate((from));
+            stopupdate.update("%s.onStop()\n", "Stopped");
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activityb);
         getLifecycle().addObserver(new myObserver(getString(R.string.B_text),
@@ -31,19 +53,24 @@ public class ActivityB extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ActivityB.this,ActivityA.class);
-                startActivity(i);
+                i.putExtra("from","Activity B");
+                startActivityForResult(i,0);
             }
         });
         startcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ActivityB.this,ActivityC.class);
-                startActivity(i);
+                i.putExtra("from","Activity B");
+                startActivityForResult(i,0);
             }
         });
         finishbButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent data = new Intent();
+                data.putExtra("from","Activity B");
+                setResult(RESULT_OK,data);
                 finish();
             }
         });
@@ -70,5 +97,11 @@ public class ActivityB extends AppCompatActivity {
                 dialog.show();//显示对话框
             }
         });
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //ActivityA.instance.onCreate(ActivityA.toBeRefresh);
     }
 }

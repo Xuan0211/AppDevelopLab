@@ -1,5 +1,6 @@
 package com.example.lab1;
 
+import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.*
 
@@ -20,6 +21,7 @@ class myObserver(
             )
         )
         repository.status[name] = status
+        Log.e("observe","Mytest:"+ name + status);
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -28,8 +30,10 @@ class myObserver(
             Lifecycle.Event.ON_START -> update("%s.onStart()\n", "Started")
             Lifecycle.Event.ON_RESUME -> update("%s.onResume()\n", "Resumed")
             Lifecycle.Event.ON_PAUSE -> update("%s.onPause()\n", "Paused")
-            Lifecycle.Event.ON_STOP -> update("%s.onStop()\n", "Stopped")
-            Lifecycle.Event.ON_DESTROY -> update("%s.onDestroy()\n", "Destroyed")
+            Lifecycle.Event.ON_STOP -> null
+            Lifecycle.Event.ON_DESTROY -> null
+            //Lifecycle.Event.ON_STOP -> update("%s.onStop()\n", "Stopped")
+           // Lifecycle.Event.ON_DESTROY -> update("%s.onDestroy()\n", "Destroyed")
             Lifecycle.Event.ON_ANY -> {}
         }
         methodList.text = repository.methodList
@@ -38,6 +42,7 @@ class myObserver(
             statusBuilder.append(String.format("%s: %s\n", k, v))
         }
         status.text = statusBuilder
+        Log.e("observe","Mytest:updates")
     }
 
 }

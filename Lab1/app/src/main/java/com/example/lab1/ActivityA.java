@@ -17,18 +17,45 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import javax.xml.transform.Result;
 
 
 public class ActivityA extends AppCompatActivity {
+    public static ActivityA instance = null;
+    public static Bundle toBeRefresh = null;
     private static final String TAG = "MyActivity";
     private Button dialogButton;
     private Button startbButton;
     private Button startcButton;
     private Button finishaButton;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data == null)
+        {
+            return;
+        }
+        stopUpdate stopupdate1;
+        stopupdate1 = new stopUpdate(data.getStringExtra("from"));
+        stopupdate1.update("%s.onStop()\n", "Stopped");
+        stopupdate1.update("%s.onDestroy()\n", "Destroyed");
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        String from = getIntent().getStringExtra("from");
+        if(from!=null)
+        {
+            stopUpdate stopupdate;
+            stopupdate = new stopUpdate((from));
+            stopupdate.update("%s.onStop()\n", "Stopped");
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitya);
+        instance = this;
+        toBeRefresh = savedInstanceState;
         getLifecycle().addObserver(new myObserver(getString(R.string.A_text),
                 findViewById(R.id.method_list),
                 findViewById(R.id.status)));
@@ -40,20 +67,25 @@ public class ActivityA extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ActivityA.this,ActivityB.class);
-                startActivity(i);
+                i.putExtra("from","Activity A");
+                startActivityForResult(i,0);
             }
         });
         startcButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(ActivityA.this,ActivityC.class);
-                startActivity(i);
+                i.putExtra("from","Activity A");
+                startActivityForResult(i,0);
                // startActivityForResult(i);
             }
         });
         finishaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent data = new Intent();
+                data.putExtra("from","Activity A");
+                setResult(RESULT_OK,data);
                 finish();
             }
         });
@@ -93,5 +125,11 @@ public class ActivityA extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.e(TAG,"MyTest:AonStop");
-    }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG,"MyTest:AonResume");
+    };
 }
