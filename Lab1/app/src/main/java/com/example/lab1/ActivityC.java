@@ -74,23 +74,8 @@ public class ActivityC extends AppCompatActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopUpdate stopupdate;
-                stopupdate = new stopUpdate("Activity C");
-                stopupdate.update("%s.onPause()\n", "Paused");
-                AlertDialog dialog=new AlertDialog.Builder(ActivityC.this)
-                        .setTitle(R.string.dialog)//设置标题
-                        .setMessage(R.string.simple_dialog)//设置要显示的内容
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(ActivityC.this, "点击了确定的按钮", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();//销毁对话框
-                                stopUpdate stopupdate;
-                                stopupdate = new stopUpdate("Activity C");
-                                stopupdate.update("%s.onResume()\n", "Resumed");
-                            }
-                        }).create();//create（）方法创建对话框
-                dialog.show();//显示对话框
+                Intent i = new Intent(ActivityC.this,Dialog.class);
+                startActivityForResult(i,0);
             }
         });
     }

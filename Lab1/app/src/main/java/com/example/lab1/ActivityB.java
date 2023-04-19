@@ -77,24 +77,8 @@ public class ActivityB extends AppCompatActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog dialog=new AlertDialog.Builder(ActivityB.this)
-                        .setTitle(R.string.dialog)//设置标题
-                        .setMessage(R.string.simple_dialog)//设置要显示的内容
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(ActivityB.this, "点击了取消按钮", Toast.LENGTH_SHORT).show();
-                                dialogInterface.dismiss();//销毁对话框
-                            }
-                        })
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(ActivityB.this, "点击了确定的按钮", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();//销毁对话框
-                            }
-                        }).create();//create（）方法创建对话框
-                dialog.show();//显示对话框
+                Intent i = new Intent(ActivityB.this,Dialog.class);
+                startActivityForResult(i,0);
             }
         });
     };

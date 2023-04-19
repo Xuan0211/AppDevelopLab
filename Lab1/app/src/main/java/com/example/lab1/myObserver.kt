@@ -41,6 +41,7 @@ class myObserver(
         repository.status.forEach { (k, v) ->
             statusBuilder.append(String.format("%s: %s\n", k, v))
         }
+        //status.setText(statusBuilder);
         status.text = statusBuilder
         Log.e("observe","Mytest:updates")
     }

@@ -29,6 +29,9 @@
             android:exported="false"
             android:theme="@style/NoTitleFullscreen">
         </activity>
+        <activity android:name=".Dialog"
+            android:theme="@style/dialog_style"
+            ></activity>
     </application>
 
 </manifest>
